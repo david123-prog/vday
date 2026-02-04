@@ -10,11 +10,11 @@
 
   <style>
     :root {
-      --bg1: #ffd6e7;
-      --bg2: #ffeef6;
-      --card: #ffffffcc;
-      --yes: #ff3b7a;
-      --yesHover: #ff1f68;
+      --bg1: #e6d3b1;     /* light brown */
+      --bg2: #f3e6cf;     /* lighter brown */
+      --card: #ffe4ec;   /* light pink */
+      --yes: #5a3a1e;    /* dark brown */
+      --yesHover: #4a2f18;
     }
 
     * { box-sizing: border-box; }
@@ -30,7 +30,6 @@
       padding: 16px;
     }
 
-    /* FULL-SCREEN CONFETTI CANVAS */
     #confettiCanvas {
       position: fixed;
       inset: 0;
@@ -48,12 +47,14 @@
       border-radius: 22px;
       text-align: center;
       box-shadow: 0 18px 60px rgba(0,0,0,.15);
+      border: 1px solid rgba(255,255,255,.6);
     }
 
     .art {
       width: min(260px, 80vw);
       margin: 0 auto 10px;
       display: block;
+      border-radius: 16px;
       filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
     }
 
@@ -91,18 +92,15 @@
       background: var(--yes);
       color: #fff;
     }
-    #yesBtn:hover { background: var(--yesHover); }
+
+    #yesBtn:hover {
+      background: var(--yesHover);
+    }
 
     #noBtn {
       left: 62%;
       background: #e5e7eb;
       color: #111827;
-    }
-
-    .hint {
-      margin-top: 10px;
-      font-size: 13px;
-      opacity: .7;
     }
 
     .result {
@@ -133,53 +131,19 @@
   <canvas id="confettiCanvas"></canvas>
 
   <main class="card">
-    <!-- ANIMAL WITH HEART -->
-    <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="fur" x1="0" x2="1">
-          <stop offset="0" stop-color="#f7c7a1"/>
-          <stop offset="1" stop-color="#f2a97b"/>
-        </linearGradient>
-        <linearGradient id="heart" x1="0" x2="1">
-          <stop offset="0" stop-color="#ff4d7d"/>
-          <stop offset="1" stop-color="#ff1f68"/>
-        </linearGradient>
-      </defs>
+    <!-- GIF -->
+    <img
+      class="art"
+      src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Z0ZWZjZDY2emtwcHpydno2MDR3bWthanZxdWdzeXd0Zzl0YnZ3eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/sMe2be8ffM6M7st5ZL/giphy.gif"
+      alt="Cute Valentine GIF"
+    />
 
-      <path d="M250 50 C250 33 270 25 282 38
-               C294 25 314 33 314 50
-               C314 78 282 92 282 106
-               C282 92 250 78 250 50Z"
-            fill="url(#heart)"/>
-
-      <path d="M90 120 C90 70 140 40 190 60
-               C240 40 290 70 290 120
-               C290 180 240 210 190 210
-               C140 210 90 180 90 120Z"
-            fill="url(#fur)"/>
-
-      <path d="M110 92 L95 55 L140 78 Z" fill="#f2a97b"/>
-      <path d="M270 92 L285 55 L240 78 Z" fill="#f2a97b"/>
-
-      <circle cx="160" cy="130" r="8"/>
-      <circle cx="220" cy="130" r="8"/>
-
-      <path d="M190 144 C186 144 182 148 182 152
-               C182 160 190 164 190 170
-               C190 164 198 160 198 152
-               C198 148 194 144 190 144Z"
-            fill="#ff7aa2"/>
-    </svg>
-
-    <h1>jasmin will you be my valentine?</h1>
+    <h1>Hi Jasmin, will you be my Valentine?</h1>
 
     <section class="button-zone" id="zone">
       <button id="yesBtn">Yes</button>
       <button id="noBtn">No</button>
     </section>
-
-    <!-- HINT -->
-    <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
     <section class="result" id="result">
       <h2>YAY! 🎉</h2>
@@ -196,29 +160,25 @@
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
     const result = document.getElementById("result");
-    const hint = document.getElementById("hint");
 
-    /* ---------- CONFETTI ---------- */
     const confettiCanvas = document.getElementById("confettiCanvas");
 
     function resizeConfettiCanvas() {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       confettiCanvas.width = Math.floor(window.innerWidth * dpr);
       confettiCanvas.height = Math.floor(window.innerHeight * dpr);
-      confettiCanvas.style.width = "100vw";
-      confettiCanvas.style.height = "100vh";
     }
 
     resizeConfettiCanvas();
     window.addEventListener("resize", resizeConfettiCanvas);
     window.addEventListener("orientationchange", () => setTimeout(resizeConfettiCanvas, 150));
 
-    const confettiInstance = confetti.create(confettiCanvas, {
-      resize: false,
-      useWorker: true
-    });
+    const confettiInstance = (typeof confetti !== "undefined")
+      ? confetti.create(confettiCanvas, { resize: false, useWorker: true })
+      : null;
 
     function fullScreenConfetti() {
+      if (!confettiInstance) return;
       const end = Date.now() + 1600;
 
       (function frame() {
@@ -243,14 +203,12 @@
       }, 300);
     }
 
-    /* ---------- YES BUTTON GROWS ---------- */
     let yesScale = 1;
     function growYes() {
       yesScale = Math.min(2.2, yesScale + 0.1);
       yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
     }
 
-    /* ---------- NO BUTTON RUNS AWAY ---------- */
     function clamp(n, min, max) {
       return Math.max(min, Math.min(max, n));
     }
@@ -289,10 +247,8 @@
 
     noBtn.addEventListener("click", e => e.preventDefault());
 
-    /* ---------- YES CLICK ---------- */
     yesBtn.addEventListener("click", () => {
       zone.style.display = "none";
-      hint.style.display = "none";     // HIDE THE HINT
       result.style.display = "block";
       resizeConfettiCanvas();
       fullScreenConfetti();
@@ -300,5 +256,3 @@
   </script>
 </body>
 </html>
-
-
