@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Will you be my Valentine?</title>
 
-  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
     :root {
-      --bg1: #e6d3b1;     /* light brown */
-      --bg2: #f3e6cf;     /* lighter brown */
-      --card: #ffe4ec;   /* light pink */
-      --yes: #5a3a1e;    /* dark brown */
+      --bg1: #a97c50;
+      --bg2: #c8a878;
+      --card: #ffe4ec;
+      --yes: #5a3a1e;
       --yesHover: #4a2f18;
+      --noText: #d1d5db;
     }
 
     * { box-sizing: border-box; }
@@ -33,41 +33,43 @@
     #confettiCanvas {
       position: fixed;
       inset: 0;
-      width: 100vw;
-      height: 100vh;
       pointer-events: none;
       z-index: 9999;
     }
 
     .card {
-      width: min(720px, 92vw);
-      padding: 26px 22px;
+      width: min(560px, 92vw);
+      aspect-ratio: 1 / 1;
       background: var(--card);
-      backdrop-filter: blur(10px);
-      border-radius: 22px;
+      border-radius: 50%;
       text-align: center;
       box-shadow: 0 18px 60px rgba(0,0,0,.15);
       border: 1px solid rgba(255,255,255,.6);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      gap: 10px;
     }
 
     .art {
-      width: min(260px, 80vw);
-      margin: 0 auto 10px;
-      display: block;
-      border-radius: 16px;
+      width: min(220px, 60vw);
+      border-radius: 18px;
       filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
     }
 
     h1 {
-      font-size: clamp(26px, 4vw, 44px);
-      margin: 12px 0 18px;
+      font-size: clamp(22px, 3.6vw, 36px);
+      margin: 6px 0;
+      padding: 0 10px;
     }
 
     .button-zone {
       position: relative;
-      width: min(520px, 92%);
-      height: 150px;
-      margin: 0 auto;
+      width: min(420px, 88%);
+      height: 130px;
       touch-action: none;
     }
 
@@ -75,49 +77,50 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      padding: 16px 24px;
       font-size: 18px;
       font-weight: 800;
-      border-radius: 999px;
       border: none;
       cursor: pointer;
       box-shadow: 0 10px 24px rgba(0,0,0,.14);
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
       transition: transform .12s ease, background .12s ease;
     }
 
     #yesBtn {
-      left: 18%;
+      left: 14%;
+      padding: 16px 26px;
+      border-radius: 999px;
       background: var(--yes);
       color: #fff;
     }
 
-    #yesBtn:hover {
-      background: var(--yesHover);
-    }
+    #yesBtn:hover { background: var(--yesHover); }
 
     #noBtn {
-      left: 62%;
-      background: #e5e7eb;
-      color: #111827;
+      left: 66%;
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: var(--card);
+      color: var(--noText);
+      letter-spacing: 0.5px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
+      border: 1px solid rgba(255,255,255,.55);
     }
 
     .result {
       display: none;
-      margin-top: 18px;
       animation: pop .35s ease;
     }
 
     .result h2 {
-      font-size: clamp(30px, 4.5vw, 46px);
-      margin: 10px 0;
+      font-size: clamp(26px, 4.2vw, 42px);
+      margin: 8px 0;
     }
 
     .fireworks {
-      width: min(380px, 90vw);
-      margin: 0 auto;
-      display: block;
+      width: min(300px, 70vw);
+      border-radius: 14px;
     }
 
     @keyframes pop {
@@ -131,14 +134,13 @@
   <canvas id="confettiCanvas"></canvas>
 
   <main class="card">
-    <!-- GIF -->
     <img
       class="art"
       src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Z0ZWZjZDY2emtwcHpydno2MDR3bWthanZxdWdzeXd0Zzl0YnZ3eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/sMe2be8ffM6M7st5ZL/giphy.gif"
       alt="Cute Valentine GIF"
     />
 
-    <h1>Hi Jasmin, will you be my Valentine?</h1>
+    <h1>Jasmin, will you be my Valentine?</h1>
 
     <section class="button-zone" id="zone">
       <button id="yesBtn">Yes</button>
@@ -149,8 +151,8 @@
       <h2>YAY! 🎉</h2>
       <img
         class="fireworks"
-        src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-        alt="Fireworks"
+        src="https://media.giphy.com/media/ShGpqpvbXIoyUPdYmv/giphy.gif"
+        alt="Love is in the air"
       />
     </section>
   </main>
@@ -160,7 +162,6 @@
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
     const result = document.getElementById("result");
-
     const confettiCanvas = document.getElementById("confettiCanvas");
 
     function resizeConfettiCanvas() {
@@ -171,16 +172,11 @@
 
     resizeConfettiCanvas();
     window.addEventListener("resize", resizeConfettiCanvas);
-    window.addEventListener("orientationchange", () => setTimeout(resizeConfettiCanvas, 150));
 
-    const confettiInstance = (typeof confetti !== "undefined")
-      ? confetti.create(confettiCanvas, { resize: false, useWorker: true })
-      : null;
+    const confettiInstance = confetti.create(confettiCanvas, { resize: false, useWorker: true });
 
     function fullScreenConfetti() {
-      if (!confettiInstance) return;
       const end = Date.now() + 1600;
-
       (function frame() {
         confettiInstance({
           particleCount: 12,
@@ -191,7 +187,6 @@
         });
         if (Date.now() < end) requestAnimationFrame(frame);
       })();
-
       setTimeout(() => {
         confettiInstance({
           particleCount: 300,
@@ -216,23 +211,17 @@
     function moveNo(px, py) {
       const z = zone.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
-
       let dx = (b.left + b.width / 2) - px;
       let dy = (b.top + b.height / 2) - py;
       let mag = Math.hypot(dx, dy) || 1;
       dx /= mag;
       dy /= mag;
-
       let newLeft = (b.left - z.left) + dx * 150;
       let newTop  = (b.top - z.top) + dy * 150;
-
       newLeft = clamp(newLeft, 0, z.width - b.width);
       newTop  = clamp(newTop, 0, z.height - b.height);
-
       noBtn.style.left = newLeft + "px";
       noBtn.style.top = newTop + "px";
-      noBtn.style.transform = "none";
-
       growYes();
     }
 
