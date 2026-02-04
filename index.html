@@ -9,17 +9,15 @@
 
   <style>
     :root {
-      /* cafe background */
+      /* Café au lait background */
       --bg1: #a67b5b;
       --bg2: #c19a6b;
 
-      /* Card + buttons */
       --card: #ffe4ec;
       --yes: #5a3a1e;
       --yesHover: #4a2f18;
       --noText: #d1d5db;
 
-      /* Purple accents */
       --purple1: #7c3aed;
       --purple2: #a78bfa;
       --purple3: #c4b5fd;
@@ -37,16 +35,14 @@
       font-family: system-ui, sans-serif;
       overflow: hidden;
       padding: 16px;
-      position: relative;
     }
 
-    /* SUBTLE FLOATING HEARTS BACKGROUND */
+    /* Floating hearts */
     .hearts {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      overflow: hidden;
     }
 
     .heart {
@@ -54,14 +50,12 @@
       bottom: -60px;
       font-size: 18px;
       opacity: 0.18;
-      filter: blur(0.2px);
       animation: floatUp linear infinite;
-      will-change: transform;
     }
 
     @keyframes floatUp {
-      0%   { transform: translateY(0) translateX(0) rotate(0deg); }
-      100% { transform: translateY(-115vh) translateX(40px) rotate(18deg); }
+      from { transform: translateY(0); }
+      to { transform: translateY(-115vh); }
     }
 
     #confettiCanvas {
@@ -71,10 +65,9 @@
       z-index: 9999;
     }
 
-    /* BIG OVAL CARD */
     .card {
       position: relative;
-      z-index: 2; /* above hearts */
+      z-index: 2;
       width: min(760px, 94vw);
       height: min(520px, 90vh);
       background: var(--card);
@@ -83,12 +76,10 @@
       box-shadow: 0 18px 60px rgba(0,0,0,.15);
       border: 1px solid rgba(255,255,255,.6);
       backdrop-filter: blur(10px);
-
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
       padding: 40px;
       gap: 14px;
     }
@@ -96,20 +87,17 @@
     .art {
       width: min(240px, 60vw);
       border-radius: 18px;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
     }
 
     h1 {
       font-size: clamp(24px, 3.6vw, 38px);
       margin: 6px 0;
-      padding: 0 16px;
     }
 
     .button-zone {
       position: relative;
       width: min(520px, 90%);
       height: 140px;
-      touch-action: none;
     }
 
     button {
@@ -122,7 +110,7 @@
       cursor: pointer;
       box-shadow: 0 10px 24px rgba(0,0,0,.14);
       user-select: none;
-      transition: transform .12s ease, background .12s ease;
+      transition: background .12s ease;
     }
 
     #yesBtn {
@@ -132,9 +120,10 @@
       background: var(--yes);
       color: #fff;
     }
+
     #yesBtn:hover { background: var(--yesHover); }
 
-    /* Sneaky NO button */
+    /* NO BUTTON SHRINK LOOP */
     #noBtn {
       left: 68%;
       width: 80px;
@@ -142,8 +131,30 @@
       border-radius: 50%;
       background: var(--card);
       color: var(--noText);
-      letter-spacing: 0.5px;
       border: 1px solid rgba(255,255,255,.55);
+      animation: shrinkAway 6s linear infinite;
+    }
+
+    @keyframes shrinkAway {
+      0% {
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+      }
+      85% {
+        transform: translateY(-50%) scale(0.1);
+        opacity: 0.1;
+      }
+      100% {
+        transform: translateY(-50%) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .error {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #6b7280;
+      display: none;
     }
 
     .result {
@@ -153,43 +164,23 @@
 
     .result h2 {
       font-size: clamp(28px, 4.5vw, 46px);
-      margin: 8px 0;
       color: var(--purple1);
-      text-shadow: 0 6px 20px rgba(124,58,237,.25);
-    }
-
-    .fireworks {
-      width: min(320px, 70vw);
-      border-radius: 14px;
     }
 
     @keyframes pop {
       from { transform: scale(.96); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
-
-    @media (max-width: 420px) {
-      .card {
-        height: auto;
-        border-radius: 48px;
-        padding: 28px;
-      }
-      .heart { opacity: 0.14; }
-    }
   </style>
 </head>
 
 <body>
-  <!-- Floating hearts layer -->
-  <div class="hearts" aria-hidden="true">
-    <span class="heart" style="left: 8%;  animation-duration: 16s; animation-delay: 0s;  font-size: 18px;">💜</span>
-    <span class="heart" style="left: 18%; animation-duration: 22s; animation-delay: 3s;  font-size: 22px;">💜</span>
-    <span class="heart" style="left: 30%; animation-duration: 18s; animation-delay: 7s;  font-size: 16px;">💜</span>
-    <span class="heart" style="left: 42%; animation-duration: 24s; animation-delay: 1s;  font-size: 26px;">💜</span>
-    <span class="heart" style="left: 55%; animation-duration: 19s; animation-delay: 5s;  font-size: 20px;">💜</span>
-    <span class="heart" style="left: 66%; animation-duration: 26s; animation-delay: 2s;  font-size: 18px;">💜</span>
-    <span class="heart" style="left: 78%; animation-duration: 21s; animation-delay: 9s;  font-size: 24px;">💜</span>
-    <span class="heart" style="left: 90%; animation-duration: 28s; animation-delay: 4s;  font-size: 16px;">💜</span>
+  <div class="hearts">
+    <span class="heart" style="left:10%;animation-duration:18s;">💜</span>
+    <span class="heart" style="left:30%;animation-duration:22s;">💜</span>
+    <span class="heart" style="left:50%;animation-duration:20s;">💜</span>
+    <span class="heart" style="left:70%;animation-duration:26s;">💜</span>
+    <span class="heart" style="left:90%;animation-duration:24s;">💜</span>
   </div>
 
   <canvas id="confettiCanvas"></canvas>
@@ -201,17 +192,19 @@
       alt="Cute Valentine GIF"
     />
 
-    <h1>Hi Jasmin, will you be my Valentine?</h1>
+    <h1>Jasmin, will you be my Valentine?</h1>
 
-    <section class="button-zone" id="zone">
+    <section class="button-zone">
       <button id="yesBtn">Yes</button>
       <button id="noBtn">No</button>
     </section>
 
+    <div class="error" id="errorMsg">Error: wrong answer</div>
+
     <section class="result" id="result">
       <h2>:)))) 💜💜💜</h2>
       <img
-        class="fireworks"
+        class="art"
         src="https://media.giphy.com/media/ShGpqpvbXIoyUPdYmv/giphy.gif"
         alt="Love is in the air"
       />
@@ -219,107 +212,41 @@
   </main>
 
   <script>
-    const zone = document.getElementById("zone");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
     const result = document.getElementById("result");
+    const errorMsg = document.getElementById("errorMsg");
     const confettiCanvas = document.getElementById("confettiCanvas");
 
     function resizeConfettiCanvas() {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
-      confettiCanvas.width = Math.floor(window.innerWidth * dpr);
-      confettiCanvas.height = Math.floor(window.innerHeight * dpr);
-      confettiCanvas.style.width = "100vw";
-      confettiCanvas.style.height = "100vh";
+      confettiCanvas.width = window.innerWidth * dpr;
+      confettiCanvas.height = window.innerHeight * dpr;
     }
 
     resizeConfettiCanvas();
     window.addEventListener("resize", resizeConfettiCanvas);
-    window.addEventListener("orientationchange", () => setTimeout(resizeConfettiCanvas, 150));
 
-    const confettiInstance = (typeof confetti !== "undefined")
-      ? confetti.create(confettiCanvas, { resize: false, useWorker: true })
-      : null;
-
-    /* Purple-tinted confetti */
+    const confettiInstance = confetti.create(confettiCanvas, { resize: false, useWorker: true });
     const confettiColors = ["#7c3aed", "#a78bfa", "#c4b5fd", "#6d28d9"];
 
     function fullScreenConfetti() {
-      if (!confettiInstance) return;
-      const end = Date.now() + 1700;
-
-      (function frame() {
-        confettiInstance({
-          particleCount: 12,
-          spread: 90,
-          startVelocity: 45,
-          ticks: 180,
-          colors: confettiColors,
-          origin: { x: Math.random(), y: Math.random() * 0.3 }
-        });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
-
-      setTimeout(() => {
-        confettiInstance({
-          particleCount: 260,
-          spread: 140,
-          startVelocity: 58,
-          ticks: 220,
-          colors: confettiColors,
-          origin: { x: 0.5, y: 0.55 }
-        });
-      }, 280);
+      confettiInstance({
+        particleCount: 300,
+        spread: 140,
+        startVelocity: 55,
+        colors: confettiColors,
+        origin: { x: 0.5, y: 0.55 }
+      });
     }
 
-    let yesScale = 1;
-    function growYes() {
-      yesScale = Math.min(2.2, yesScale + 0.1);
-      yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
-    }
-
-    function clamp(n, min, max) {
-      return Math.max(min, Math.min(max, n));
-    }
-
-    function moveNo(px, py) {
-      const z = zone.getBoundingClientRect();
-      const b = noBtn.getBoundingClientRect();
-
-      let dx = (b.left + b.width / 2) - px;
-      let dy = (b.top + b.height / 2) - py;
-      let mag = Math.hypot(dx, dy) || 1;
-      dx /= mag;
-      dy /= mag;
-
-      let newLeft = (b.left - z.left) + dx * 150;
-      let newTop  = (b.top - z.top) + dy * 150;
-
-      newLeft = clamp(newLeft, 0, z.width - b.width);
-      newTop  = clamp(newTop, 0, z.height - b.height);
-
-      noBtn.style.left = newLeft + "px";
-      noBtn.style.top = newTop + "px";
-      noBtn.style.transform = "none";
-
-      growYes();
-    }
-
-    zone.addEventListener("pointermove", e => {
-      const b = noBtn.getBoundingClientRect();
-      const d = Math.hypot(
-        (b.left + b.width / 2) - e.clientX,
-        (b.top + b.height / 2) - e.clientY
-      );
-      if (d < 140) moveNo(e.clientX, e.clientY);
+    noBtn.addEventListener("click", () => {
+      errorMsg.style.display = "block";
+      setTimeout(() => errorMsg.style.display = "none", 1800);
     });
 
-    noBtn.addEventListener("click", e => e.preventDefault());
-
     yesBtn.addEventListener("click", () => {
-      zone.style.display = "none";
       result.style.display = "block";
-      resizeConfettiCanvas();
       fullScreenConfetti();
     });
   </script>
