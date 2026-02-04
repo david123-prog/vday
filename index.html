@@ -9,7 +9,7 @@
 
   <style>
     :root {
-      /* Café au lait background */
+      /* Café au lait */
       --bg1: #a67b5b;
       --bg2: #c19a6b;
 
@@ -72,16 +72,18 @@
       height: min(520px, 90vh);
       background: var(--card);
       border-radius: 999px;
-      text-align: center;
       box-shadow: 0 18px 60px rgba(0,0,0,.15);
       border: 1px solid rgba(255,255,255,.6);
       backdrop-filter: blur(10px);
+
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
       padding: 40px;
       gap: 14px;
+      text-align: center;
     }
 
     .art {
@@ -110,20 +112,27 @@
       cursor: pointer;
       box-shadow: 0 10px 24px rgba(0,0,0,.14);
       user-select: none;
-      transition: background .12s ease;
     }
 
+    /* YES grows every 6 seconds */
     #yesBtn {
       left: 16%;
       padding: 16px 28px;
       border-radius: 999px;
       background: var(--yes);
       color: #fff;
+      animation: growYes 6s ease-in-out infinite;
     }
 
     #yesBtn:hover { background: var(--yesHover); }
 
-    /* NO BUTTON SHRINK LOOP */
+    @keyframes growYes {
+      0%   { transform: translateY(-50%) scale(1); }
+      85%  { transform: translateY(-50%) scale(1.9); }
+      100% { transform: translateY(-50%) scale(1); }
+    }
+
+    /* NO shrinks & disappears */
     #noBtn {
       left: 68%;
       width: 80px;
@@ -192,7 +201,7 @@
       alt="Cute Valentine GIF"
     />
 
-    <h1>Jasmin, will you be my Valentine?</h1>
+    <h1>Hi Jasmin, will you be my Valentine?</h1>
 
     <section class="button-zone">
       <button id="yesBtn">Yes</button>
@@ -202,7 +211,7 @@
     <div class="error" id="errorMsg">Error: wrong answer</div>
 
     <section class="result" id="result">
-      <h2>:)))) 💜💜💜</h2>
+      <h2>:))) 💜💜💜</h2>
       <img
         class="art"
         src="https://media.giphy.com/media/ShGpqpvbXIoyUPdYmv/giphy.gif"
@@ -232,7 +241,7 @@
 
     function fullScreenConfetti() {
       confettiInstance({
-        particleCount: 300,
+        particleCount: 280,
         spread: 140,
         startVelocity: 55,
         colors: confettiColors,
